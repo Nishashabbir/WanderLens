@@ -60,7 +60,7 @@ export default function Hero() {
                 key={s}
                 type="button"
                 onClick={() => setQuery(s)}
-                className="rounded-full border   px-3 py-1.5 backdrop-blur-md transition-colors font-bold hover:bg-amber-500 cursor-pointer"
+                className="rounded-full border   px-3 py-1.5 backdrop-blur-md transition-colors font-bold hover:bg-amber-600 cursor-pointer"
               >
                 {s}
               </button>
