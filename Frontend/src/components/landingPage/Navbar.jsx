@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, Compass, Menu } from "lucide-react";
 
 const links = ["Explore", "Destinations", "Viewpoints", "Experiences"];
@@ -60,9 +61,12 @@ export default function Navbar() {
           >
             <Search className="h-4 w-4" />
           </a>
-          <button className="hidden rounded-full bg-[image:var(--gradient-warm)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5 sm:block">
+          <Link
+            to="/login"
+            className="hidden rounded-full bg-[image:var(--gradient-warm)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5 sm:block"
+          >
             Log in
-          </button>
+          </Link>
           <button
             aria-label="Menu"
             className={`grid h-10 w-10 place-items-center rounded-full border md:hidden ${

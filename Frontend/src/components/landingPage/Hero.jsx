@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, MapPin } from "lucide-react";
-import hero from "@/assets/hero.jpg";
+import hero from "@/assets/hero2.png";
 
 const suggestions = ["Hunza", "Islamabad", "Skardu", "Lahore", "Fairy Meadows"];
 
@@ -25,7 +25,7 @@ export default function Hero() {
 
         <h1 className="animate-rise text-balance text-5xl font-semibold leading-[1.05] text-primary-foreground sm:text-6xl md:text-7xl">
           Discover places worth
-          <span className="block italic text-[color:var(--primary-glow)]">travelling for.</span>
+          <span className="block italic text-orange-500">travelling for.</span>
         </h1>
 
         <p className="animate-rise mt-6 max-w-xl text-pretty text-base text-primary-foreground/85 sm:text-lg">
@@ -48,7 +48,7 @@ export default function Hero() {
             />
             <button
               type="submit"
-              className="shrink-0 rounded-full bg-[image:var(--gradient-warm)] px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:px-7"
+              className="shrink-0 rounded-full bg-[image:var(--gradient-warm)] px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:px-7 "
             >
               Explore
             </button>
@@ -60,7 +60,7 @@ export default function Hero() {
                 key={s}
                 type="button"
                 onClick={() => setQuery(s)}
-                className="rounded-full border border-primary-foreground/25 bg-primary-foreground/10 px-3 py-1.5 backdrop-blur-md transition-colors hover:bg-primary-foreground/20"
+                className="rounded-full border   px-3 py-1.5 backdrop-blur-md transition-colors font-bold hover:bg-amber-500 cursor-pointer"
               >
                 {s}
               </button>
