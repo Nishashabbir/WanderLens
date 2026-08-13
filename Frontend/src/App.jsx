@@ -10,6 +10,11 @@ import CallToAction from "@/components/landingPage/CallToAction";
 import Footer from "@/components/landingPage/Footer";
 import Login from "@/components/login";
 import Register from "@/components/register";
+import Profile from "@/components/profilePage";
+import Explore from "@/components/Explore";
+import DestinationDetails from "@/components/DestinationDetails";
+import ViewpointsPage from "@/components/viewpoints";
+import PlaceDetails from "@/components/placedetails";
 
 function Home() {
   return (
@@ -36,6 +41,11 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/destination/:name" element={<DestinationDetails />} />
+        <Route path="/viewpoints" element={<ViewpointsPage />} />
+        <Route path="/place/:name" element={<PlaceDetails />} />
       </Routes>
     </BrowserRouter>
   );

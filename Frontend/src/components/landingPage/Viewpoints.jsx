@@ -1,21 +1,30 @@
 import { Star, MapPin, Bookmark } from "lucide-react";
+import { Link } from "react-router-dom";
 import { viewpoints } from "./data";
 
 export default function Viewpoints() {
   return (
     <section id="viewpoints" className="bg-ink">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="max-w-2xl">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--primary-glow)]">
-            Featured viewpoints
-          </span>
-          <h2 className="mt-3 text-3xl font-semibold text-primary-foreground sm:text-4xl">
-            The spots people climb for
-          </h2>
-          <p className="mt-3 text-pretty text-primary-foreground/70">
-            Every viewpoint comes with the exact location, the best hour to be there and photos from
-            people who made the trip.
-          </p>
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-2xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--primary-glow)]">
+              Featured viewpoints
+            </span>
+            <h2 className="mt-3 text-3xl font-semibold text-primary-foreground sm:text-4xl">
+              The spots people climb for
+            </h2>
+            <p className="mt-3 text-pretty text-primary-foreground/70">
+              Every viewpoint comes with the exact location, the best hour to be there and photos from
+              people who made the trip.
+            </p>
+          </div>
+          <Link
+            to="/viewpoints"
+            className="text-sm font-semibold text-[color:var(--primary-glow)] hover:underline"
+          >
+            View all viewpoints
+          </Link>
         </div>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
