@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Compass, Menu, User } from "lucide-react";
 
-const links = ["Explore", "Destinations", "Viewpoints", "Experiences"];
+const links = [
+  { label: "Home", to: "/" },
+  { label: "Explore", to: "/explore" },
+  { label: "Destinations", to: "/destination/hunza" },
+  { label: "Viewpoints", to: "/viewpoints" },
+  { label: "Experiences", to: "/explore" },
+  { label: "Trips", to: "/trips" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -22,9 +29,9 @@ export default function Navbar() {
           : "bg-transparent py-5"
       }`}
     >
-      <nav className="mx-auto flex max-w-7xl items-center gap-6 px-5 sm:px-8">
-        <a
-          href="#top"
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
+        <Link
+          to="/"
           className={`flex items-center gap-2 text-lg font-semibold tracking-tight ${
             scrolled ? "text-foreground" : "text-primary-foreground"
           }`}
@@ -33,33 +40,23 @@ export default function Navbar() {
             <Compass className="h-5 w-5" />
           </span>
           <span style={{ fontFamily: "var(--font-display)" }}>Wanderlens</span>
-        </a>
+        </Link>
 
         <ul
-          className={`ml-4 hidden items-center gap-7 text-sm font-medium md:flex ${
+          className={`hidden items-center gap-7 text-sm font-medium md:flex ${
             scrolled ? "text-muted-foreground" : "text-primary-foreground/85"
           }`}
         >
           {links.map((l) => (
-            <li key={l}>
-              {l === "Explore" ? (
-                <Link to="/explore" className="transition-colors hover:text-primary">
-                  {l}
-                </Link>
-              ) : l === "Viewpoints" ? (
-                <Link to="/viewpoints" className="transition-colors hover:text-primary">
-                  {l}
-                </Link>
-              ) : (
-                <a href={`#${l.toLowerCase()}`} className="transition-colors hover:text-primary">
-                  {l}
-                </a>
-              )}
+            <li key={l.label}>
+              <Link to={l.to} className="transition-colors hover:text-primary">
+                {l.label}
+              </Link>
             </li>
           ))}
         </ul>
 
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <a
             href="#search"
             aria-label="Search destinations"

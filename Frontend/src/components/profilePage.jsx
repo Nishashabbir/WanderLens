@@ -2,6 +2,7 @@ import { useState } from "react";
 import fairyImage from "@/assets/travel2.jpg";
 import hunza from "@/assets/hunza1.webp";
 import skardu from "@/assets/skardu2.jpg";
+import PageNavbar from "./PageNavbar";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -51,76 +52,7 @@ export default function Profile() {
           TOP NAVIGATION
       ====================================================== */}
 
-      <header className="sticky top-0 z-50 border-b border-[#dfd5c7]/70 bg-[#f6f0e6]/90 backdrop-blur-xl">
-
-        <div className="mx-auto flex h-[82px] max-w-[1500px] items-center justify-between px-6 lg:px-10">
-
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e87908] shadow-sm">
-
-              <CompassIcon className="h-5 w-5 text-white" />
-
-            </div>
-
-            <span className="font-serif text-[25px] font-bold tracking-tight">
-              Wanderlens
-            </span>
-
-          </div>
-
-
-          {/* Navigation */}
-          <nav className="hidden items-center gap-9 md:flex">
-
-            <a
-              href="#"
-              className="text-[15px] text-[#6d5e55] transition hover:text-[#e87908]"
-            >
-              Explore
-            </a>
-
-            <a
-              href="#"
-              className="text-[15px] text-[#6d5e55] transition hover:text-[#e87908]"
-            >
-              Destinations
-            </a>
-
-            <a
-              href="#"
-              className="text-[15px] text-[#6d5e55] transition hover:text-[#e87908]"
-            >
-              Viewpoints
-            </a>
-
-            <a
-              href="#"
-              className="text-[15px] text-[#6d5e55] transition hover:text-[#e87908]"
-            >
-              Experiences
-            </a>
-
-          </nav>
-
-
-          {/* Right */}
-          <div className="flex items-center gap-4">
-
-            <button className="hidden h-10 w-10 items-center justify-center rounded-full border border-[#d8cfc2] bg-white/60 md:flex">
-              <SearchIcon className="h-5 w-5" />
-            </button>
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#321d14] text-sm font-semibold text-white">
-              NS
-            </div>
-
-          </div>
-
-        </div>
-
-      </header>
+      <PageNavbar />
 
 
       {/* =====================================================
@@ -673,22 +605,6 @@ function CompassIcon({ className = "h-5 w-5" }) {
     >
       <circle cx="12" cy="12" r="9" />
       <path d="M15.5 8.5L13.5 13.5L8.5 15.5L10.5 10.5L15.5 8.5Z" />
-    </svg>
-  );
-}
-
-
-function SearchIcon({ className = "h-5 w-5" }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="M16 16L21 21" />
     </svg>
   );
 }

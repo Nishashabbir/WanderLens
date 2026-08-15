@@ -1,8 +1,20 @@
 import { useState } from "react";
-import baltiFort from "@/assets/hero1.avif"; 
+import { Link, useParams } from "react-router-dom";
+import PageNavbar from "./PageNavbar";
+import { destinations } from "./destinationData";
+
+const slugify = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+
 export default function DestinationDetails() {
+  const { name } = useParams();
   const [activeTab, setActiveTab] = useState("Overview");
   const [saved, setSaved] = useState(false);
+
+  const data = destinations[name] || destinations.hunza;
 
   const navigation = [
     "Overview",
@@ -10,100 +22,6 @@ export default function DestinationDetails() {
     "Viewpoints",
     "Activities",
     "Travel guide",
-  ];
-
-  const attractions = [
-    {
-      name: "Attabad Lake",
-      category: "Nature",
-      description:
-        "Impossible turquoise water surrounded by some of the Karakoram's most dramatic peaks.",
-      image:
-        "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1400&q=85",
-    },
-    {
-      name: "Baltit Fort",
-      category: "Heritage",
-      description:
-        "A centuries-old fort overlooking Karimabad and the valley beyond.",
-      image: baltiFort,
-    },
-    {
-      name: "Passu Cones",
-      category: "Viewpoint",
-      description:
-        "Sharp, unforgettable peaks rising above the quiet village of Passu.",
-      image:
-        "https://images.unsplash.com/photo-1521292270410-a8c4d716d518?auto=format&fit=crop&w=1400&q=85",
-    },
-  ];
-
-  const viewpoints = [
-    {
-      name: "Eagle's Nest",
-      place: "Duikar",
-      image:
-        "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?auto=format&fit=crop&w=1200&q=85",
-      time: "Best at sunrise",
-    },
-    {
-      name: "Rakaposhi View",
-      place: "Nagar Valley",
-      image:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85",
-      time: "Best at sunset",
-    },
-    {
-      name: "Passu Viewpoint",
-      place: "Gojal",
-      image:
-        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85",
-      time: "Golden hour",
-    },
-  ];
-
-  const activities = [
-    {
-      title: "Lake boating",
-      icon: "↗",
-    },
-    {
-      title: "Mountain trekking",
-      icon: "⌁",
-    },
-    {
-      title: "Fort exploration",
-      icon: "◇",
-    },
-    {
-      title: "Local food",
-      icon: "✦",
-    },
-    {
-      title: "Photography",
-      icon: "◎",
-    },
-  ];
-
-  const nearby = [
-    {
-      name: "Skardu",
-      distance: "285 km away",
-      image:
-        "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-      name: "Fairy Meadows",
-      distance: "240 km away",
-      image:
-        "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-      name: "Naltar Valley",
-      distance: "42 km away",
-      image:
-        "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=85",
-    },
   ];
 
   return (
@@ -119,8 +37,7 @@ export default function DestinationDetails() {
         <div
           className="absolute inset-0 scale-[1.08] bg-cover bg-center animate-heroZoom"
           style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=2200&q=90')",
+            backgroundImage: `url(${data.heroImage})`,
           }}
         />
 
@@ -134,57 +51,7 @@ export default function DestinationDetails() {
             NAVBAR
         ================================================== */}
 
-        <nav className="relative z-20 mx-auto flex max-w-[1500px] items-center justify-between px-6 py-7 lg:px-10">
-
-          <div className="flex items-center gap-3 text-white">
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e87908] shadow-lg">
-
-              <CompassIcon className="h-5 w-5" />
-
-            </div>
-
-            <span className="font-serif text-[25px] font-bold tracking-tight">
-              Wanderlens
-            </span>
-
-          </div>
-
-
-          <div className="hidden items-center gap-8 text-sm text-white/80 md:flex">
-
-            <a href="#" className="transition hover:text-white">
-              Explore
-            </a>
-
-            <a href="#" className="transition hover:text-white">
-              Destinations
-            </a>
-
-            <a href="#" className="transition hover:text-white">
-              Viewpoints
-            </a>
-
-            <a href="#" className="transition hover:text-white">
-              Experiences
-            </a>
-
-          </div>
-
-
-          <div className="flex items-center gap-3">
-
-            <button className="flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-[#301c14]">
-              <SearchIcon className="h-5 w-5" />
-            </button>
-
-            <button className="hidden rounded-full bg-[#e87908] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#f28a1d] sm:block">
-              Log in
-            </button>
-
-          </div>
-
-        </nav>
+        <PageNavbar variant="hero" />
 
 
         {/* =================================================
@@ -198,7 +65,7 @@ export default function DestinationDetails() {
             <div className="mb-5 flex items-center gap-3">
 
               <span className="rounded-full border border-white/25 bg-black/20 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
-                Gilgit-Baltistan
+                {data.region}
               </span>
 
               <span className="text-sm text-white/70">
@@ -210,10 +77,10 @@ export default function DestinationDetails() {
 
             <h1 className="font-serif text-6xl font-bold leading-[0.9] tracking-[-3px] text-white sm:text-7xl lg:text-[105px]">
 
-              Hunza
+              {data.name}
 
               <span className="ml-3 italic text-[#f28a12]">
-                Valley.
+                {data.suffix}
               </span>
 
             </h1>
@@ -221,22 +88,23 @@ export default function DestinationDetails() {
 
             <p className="mt-7 max-w-[650px] text-base leading-7 text-white/80 md:text-lg">
 
-              Where ancient forts, glacier-fed rivers and enormous
-              mountains turn an ordinary journey into something
-              you remember for years.
+              {data.heroText}
 
             </p>
 
 
             <div className="mt-8 flex flex-wrap gap-3">
 
-              <button className="group flex items-center gap-3 rounded-full bg-[#e87908] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:scale-[1.03] hover:bg-[#f28a1d]">
+              <Link
+                to="/explore"
+                className="group flex items-center gap-3 rounded-full bg-[#e87908] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:scale-[1.03] hover:bg-[#f28a1d]"
+              >
 
                 Explore places
 
                 <ArrowIcon className="h-4 w-4 transition duration-300 group-hover:translate-x-1" />
 
-              </button>
+              </Link>
 
 
               <button
@@ -286,25 +154,13 @@ export default function DestinationDetails() {
 
         <div className="grid overflow-hidden rounded-[25px] border border-[#dfd3c5] bg-[#fffdf9] shadow-[0_25px_70px_rgba(50,29,20,0.12)] md:grid-cols-4">
 
-          <Stat
-            number="84"
-            label="places to discover"
-          />
-
-          <Stat
-            number="18"
-            label="viewpoints"
-          />
-
-          <Stat
-            number="4.9"
-            label="traveller rating"
-          />
-
-          <Stat
-            number="May–Oct"
-            label="best time to visit"
-          />
+          {data.stats.map((stat) => (
+            <Stat
+              key={stat.label}
+              number={stat.number}
+              label={stat.label}
+            />
+          ))}
 
         </div>
 
@@ -357,14 +213,14 @@ export default function DestinationDetails() {
           <div>
 
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#e87908]">
-              The feeling
+              {data.overviewTop}
             </p>
 
             <h2 className="mt-4 max-w-[500px] font-serif text-5xl font-bold leading-[1] tracking-[-1px] md:text-6xl">
 
-              A valley that
+              {data.overviewTitleLead}
               <span className="italic text-[#e87908]">
-                stays with you.
+                {data.overviewTitleAccent}
               </span>
 
             </h2>
@@ -376,30 +232,20 @@ export default function DestinationDetails() {
 
             <p className="text-xl leading-9 text-[#594a41]">
 
-              Hunza is not simply a destination you tick off a
-              list. It is a place of slow mornings, enormous
-              landscapes and villages tucked between mountains.
+              {data.overviewLead}
 
             </p>
 
             <p className="mt-6 text-[15px] leading-8 text-[#83766d]">
 
-              Explore ancient forts, follow rivers through narrow
-              valleys, meet local communities and find viewpoints
-              where the landscape seems to stretch forever.
+              {data.overviewBody}
 
             </p>
 
 
             <div className="mt-9 flex flex-wrap gap-2">
 
-              {[
-                "Karakoram",
-                "Culture",
-                "Mountains",
-                "Photography",
-                "Adventure",
-              ].map((tag) => (
+              {data.tags.map((tag) => (
 
                 <span
                   key={tag}
@@ -445,13 +291,16 @@ export default function DestinationDetails() {
 
             </div>
 
-            <button className="flex items-center gap-2 text-sm text-white/70 transition hover:text-[#f28a12]">
+            <Link
+              to="/explore"
+              className="flex items-center gap-2 text-sm text-white/70 transition hover:text-[#f28a12]"
+            >
 
               View all places
 
               <ArrowIcon className="h-4 w-4" />
 
-            </button>
+            </Link>
 
           </div>
 
@@ -460,11 +309,12 @@ export default function DestinationDetails() {
 
           <div className="mt-14 grid gap-5 lg:grid-cols-3">
 
-            {attractions.map((place, index) => (
+            {data.attractions.map((place, index) => (
 
-              <article
+              <Link
                 key={place.name}
-                className={`group relative overflow-hidden rounded-[25px] ${
+                to={`/place/${slugify(place.name)}`}
+                className={`group relative block overflow-hidden rounded-[25px] ${
                   index === 0
                     ? "lg:col-span-2 lg:h-[570px]"
                     : "lg:h-[570px]"
@@ -509,7 +359,7 @@ export default function DestinationDetails() {
 
                 </div>
 
-              </article>
+              </Link>
 
             ))}
 
@@ -546,7 +396,7 @@ export default function DestinationDetails() {
 
           <div className="mt-14 grid gap-4 md:grid-cols-5">
 
-            {activities.map((activity, index) => (
+            {data.activities.map((activity) => (
 
               <div
                 key={activity.title}
@@ -618,11 +468,12 @@ export default function DestinationDetails() {
 
             <div className="flex gap-5 overflow-x-auto pb-5">
 
-              {viewpoints.map((view) => (
+              {data.viewpoints.map((view) => (
 
-                <article
+                <Link
                   key={view.name}
-                  className="group min-w-[300px] overflow-hidden rounded-[25px] bg-[#fffdf9] md:min-w-[370px]"
+                  to={`/place/${slugify(view.name)}`}
+                  className="group block min-w-[300px] overflow-hidden rounded-[25px] bg-[#fffdf9] md:min-w-[370px]"
                 >
 
                   <div className="relative h-[350px] overflow-hidden">
@@ -653,7 +504,7 @@ export default function DestinationDetails() {
 
                   </div>
 
-                </article>
+                </Link>
 
               ))}
 
@@ -691,29 +542,14 @@ export default function DestinationDetails() {
 
               <div className="mt-10 divide-y divide-white/10">
 
-                <TravelInfo
-                  icon="◷"
-                  title="Best time"
-                  value="May — October"
-                />
-
-                <TravelInfo
-                  icon="⌖"
-                  title="Getting there"
-                  value="Drive from Gilgit"
-                />
-
-                <TravelInfo
-                  icon="↗"
-                  title="Recommended stay"
-                  value="3 — 5 days"
-                />
-
-                <TravelInfo
-                  icon="°"
-                  title="Altitude"
-                  value="2,438 metres"
-                />
+                {data.travelInfo.map((info) => (
+                  <TravelInfo
+                    key={info.title}
+                    icon={info.icon}
+                    title={info.title}
+                    value={info.value}
+                  />
+                ))}
 
               </div>
 
@@ -743,24 +579,15 @@ export default function DestinationDetails() {
 
               {/* Location pins */}
 
-              <MapPin
-                top="35%"
-                left="42%"
-                active
-                label="Hunza"
-              />
-
-              <MapPin
-                top="20%"
-                left="67%"
-                label="Passu"
-              />
-
-              <MapPin
-                top="62%"
-                left="25%"
-                label="Karimabad"
-              />
+              {data.mapPins.map((pin) => (
+                <MapPin
+                  key={pin.label}
+                  top={pin.top}
+                  left={pin.left}
+                  active={pin.active}
+                  label={pin.label}
+                />
+              ))}
 
 
               <div className="absolute bottom-7 left-7 rounded-[18px] bg-[#fffdf9]/95 p-5 shadow-xl backdrop-blur-md">
@@ -770,7 +597,7 @@ export default function DestinationDetails() {
                 </p>
 
                 <p className="mt-1 font-serif text-xl font-bold">
-                  Hunza Valley
+                  {data.mapLabel}
                 </p>
 
                 <button className="mt-3 flex items-center gap-2 text-xs font-semibold text-[#e87908]">
@@ -827,7 +654,7 @@ export default function DestinationDetails() {
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
 
-            {nearby.map((destination) => (
+            {data.nearby.map((destination) => (
 
               <article
                 key={destination.name}
@@ -1038,38 +865,6 @@ function MapPin({ top, left, label, active = false }) {
 /* =========================================================
    ICONS
 ========================================================= */
-
-function CompassIcon({ className = "h-5 w-5" }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M15.5 8.5L13.5 13.5L8.5 15.5L10.5 10.5L15.5 8.5Z" />
-    </svg>
-  );
-}
-
-
-function SearchIcon({ className = "h-5 w-5" }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    >
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="M16 16L21 21" />
-    </svg>
-  );
-}
-
 
 function BookmarkIcon({ className = "h-5 w-5" }) {
   return (

@@ -15,6 +15,7 @@ import Explore from "@/components/Explore";
 import DestinationDetails from "@/components/DestinationDetails";
 import ViewpointsPage from "@/components/viewpoints";
 import PlaceDetails from "@/components/placedetails";
+import TripPlanner from "@/components/TripPlanner";
 
 function Home() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="/destination/:name" element={<DestinationDetails />} />
         <Route path="/viewpoints" element={<ViewpointsPage />} />
         <Route path="/place/:name" element={<PlaceDetails />} />
+        <Route path="/trips" element={<TripPlanner />} />
       </Routes>
     </BrowserRouter>
   );

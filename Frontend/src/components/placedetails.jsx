@@ -1,12 +1,20 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import fairyImage from "@/assets/travel2.jpg";
 import hunza from "@/assets/hunza1.webp";
 import skardu from "@/assets/skardu2.jpg";
+import PageNavbar from "./PageNavbar";
 
 export default function PlaceDetails() {
   const [saved, setSaved] = useState(false);
   const [addedToTrip, setAddedToTrip] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
+  const navigate = useNavigate();
+
+  const addToTrip = () => {
+    setAddedToTrip(true);
+    navigate("/trips?place=eagle%27s-nest");
+  };
 
   const images = [
     fairyImage , hunza , skardu 
@@ -40,67 +48,7 @@ export default function PlaceDetails() {
           NAVBAR
       ====================================================== */}
 
-      <nav className="absolute left-0 right-0 top-0 z-50">
-
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between px-5 py-6 lg:px-10">
-
-          {/* Logo */}
-
-          <div className="flex items-center gap-3 text-white">
-
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e87908] shadow-lg">
-
-              <CompassIcon className="h-5 w-5" />
-
-            </div>
-
-            <span className="font-serif text-[25px] font-bold">
-              Wanderlens
-            </span>
-
-          </div>
-
-
-          {/* Desktop navigation */}
-
-          <div className="hidden items-center gap-9 text-sm text-white/70 md:flex">
-
-            <a href="#" className="transition hover:text-white">
-              Explore
-            </a>
-
-            <a href="#" className="transition hover:text-white">
-              Viewpoints
-            </a>
-
-            <a href="#" className="font-medium text-white">
-              Destinations
-            </a>
-
-            <a href="#" className="transition hover:text-white">
-              Experiences
-            </a>
-
-          </div>
-
-
-          {/* Profile */}
-
-          <div className="flex items-center gap-3">
-
-            <button className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur-md">
-              <SearchIcon className="h-4 w-4" />
-            </button>
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e87908] text-xs font-bold text-white">
-              NS
-            </div>
-
-          </div>
-
-        </div>
-
-      </nav>
+      <PageNavbar variant="hero" />
 
 
       {/* =====================================================
@@ -124,13 +72,16 @@ export default function PlaceDetails() {
 
         {/* Back */}
 
-        <button className="absolute left-5 top-28 z-10 flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2.5 text-xs text-white backdrop-blur-md transition hover:bg-white hover:text-[#301c14] lg:left-10">
+        <Link
+          to="/viewpoints"
+          className="absolute left-5 top-28 z-10 flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2.5 text-xs text-white backdrop-blur-md transition hover:bg-white hover:text-[#301c14] lg:left-10"
+        >
 
           <ArrowLeftIcon className="h-4 w-4" />
 
           Back to viewpoints
 
-        </button>
+        </Link>
 
 
         {/* Gallery thumbnails */}
@@ -242,7 +193,7 @@ export default function PlaceDetails() {
 
 
               <button
-                onClick={() => setAddedToTrip(!addedToTrip)}
+                onClick={addToTrip}
                 className="flex h-12 items-center gap-2 rounded-full bg-[#e87908] px-6 text-sm font-semibold text-white transition duration-300 hover:bg-[#f28a12] hover:scale-[1.03]"
               >
 
@@ -548,7 +499,7 @@ export default function PlaceDetails() {
 
 
                   <button
-                    onClick={() => setAddedToTrip(!addedToTrip)}
+                    onClick={addToTrip}
                     className={`flex h-14 w-full items-center justify-center gap-2 rounded-full text-sm font-semibold transition duration-300 ${
                       addedToTrip
                         ? "bg-[#301c14] text-white"
@@ -839,15 +790,6 @@ function CompassIcon({ className = "h-5 w-5" }) {
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
       <circle cx="12" cy="12" r="9" />
       <path d="M15.5 8.5L13.5 13.5L8.5 15.5L10.5 10.5L15.5 8.5Z" />
-    </svg>
-  );
-}
-
-function SearchIcon({ className = "h-5 w-5" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="M16 16L21 21" />
     </svg>
   );
 }

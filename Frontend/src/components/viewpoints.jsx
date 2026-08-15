@@ -1,4 +1,15 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import PageNavbar from "./PageNavbar";
+import k2 from "@/assets/k2.jpg";
+import rakaposhi from "@/assets/rakaposhi.jpg";
+import fairymeedows from "@/assets/fairymeadows.jpg";
+
+const slugify = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
 
 export default function Viewpoints() {
   const [search, setSearch] = useState("");
@@ -50,8 +61,7 @@ export default function Viewpoints() {
       elevation: "2,100m",
       description:
         "A wide open view towards one of Pakistan's most spectacular peaks.",
-      image:
-        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85",
+      image: rakaposhi , 
     },
     {
       id: 4,
@@ -92,8 +102,7 @@ export default function Viewpoints() {
       elevation: "3,300m",
       description:
         "One of the most dramatic perspectives of Nanga Parbat.",
-      image:
-        "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1200&q=85",
+      image: fairymeedows , 
     },
     {
       id: 7,
@@ -120,8 +129,7 @@ export default function Viewpoints() {
       elevation: "3,500m",
       description:
         "A spectacular mountain panorama for serious landscape lovers.",
-      image:
-        "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=85",
+      image: k2 , 
     },
   ];
 
@@ -219,60 +227,7 @@ export default function Viewpoints() {
 
           {/* NAVBAR */}
 
-          <nav className="flex items-center justify-between">
-
-            <div className="flex items-center gap-3 text-white">
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#e87908]">
-
-                <CompassIcon className="h-5 w-5" />
-
-              </div>
-
-              <span className="font-serif text-[25px] font-bold">
-                Wanderlens
-              </span>
-
-            </div>
-
-
-            <div className="hidden items-center gap-9 text-sm text-white/65 md:flex">
-
-              <a href="#" className="transition hover:text-white">
-                Explore
-              </a>
-
-              <a
-                href="#"
-                className="font-medium text-white"
-              >
-                Viewpoints
-              </a>
-
-              <a href="#" className="transition hover:text-white">
-                Destinations
-              </a>
-
-              <a href="#" className="transition hover:text-white">
-                Experiences
-              </a>
-
-            </div>
-
-
-            <div className="flex items-center gap-3">
-
-              <button className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md">
-                <SearchIcon className="h-4 w-4" />
-              </button>
-
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e87908] text-xs font-bold text-white">
-                NS
-              </div>
-
-            </div>
-
-          </nav>
+          <PageNavbar variant="inline" />
 
 
           {/* HERO TEXT */}
@@ -522,7 +477,10 @@ export default function Viewpoints() {
 
         {filtered.length > 0 && filtered[0].featured && (
 
-          <section className="group relative mt-10 h-[550px] overflow-hidden rounded-[30px] bg-[#24150f]">
+          <Link
+            to={`/place/${slugify(filtered[0].name)}`}
+            className="group relative mt-10 block h-[550px] overflow-hidden rounded-[30px] bg-[#24150f]"
+          >
 
             <img
               src={filtered[0].image}
@@ -614,7 +572,7 @@ export default function Viewpoints() {
 
             </div>
 
-          </section>
+          </Link>
 
         )}
 
@@ -772,13 +730,13 @@ export default function Viewpoints() {
 
             </div>
 
-            <button className="group flex shrink-0 items-center gap-3 self-start rounded-full bg-[#301c14] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:scale-105 md:self-auto">
+            <Link to="/destination/hunza" className="group flex shrink-0 items-center gap-3 self-start rounded-full bg-[#301c14] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:scale-105 md:self-auto">
 
               Explore destinations
 
               <ArrowIcon className="h-4 w-4 transition group-hover:translate-x-1" />
 
-            </button>
+            </Link>
 
           </div>
 
@@ -958,13 +916,16 @@ function ViewpointCard({
           </div>
 
 
-          <button className="group/link flex items-center gap-2 text-xs font-semibold text-[#e87908]">
+          <Link
+            to={`/place/${slugify(view.name)}`}
+            className="group/link flex items-center gap-2 text-xs font-semibold text-[#e87908]"
+          >
 
             View
 
             <ArrowIcon className="h-3.5 w-3.5 transition group-hover/link:translate-x-1" />
 
-          </button>
+          </Link>
 
         </div>
 
