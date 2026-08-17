@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PageNavbar from "./PageNavbar";
-import { destinations as fallbackData } from "./destinationData";
-import { api, toDestinationDetail } from "@/api";
+import { destinations } from "./destinationData";
 
 const slugify = (value) =>
   value
@@ -14,33 +13,8 @@ export default function DestinationDetails() {
   const { name } = useParams();
   const [activeTab, setActiveTab] = useState("Overview");
   const [saved, setSaved] = useState(false);
-  const [data, setData] = useState(fallbackData[name] || fallbackData.hunza);
 
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      try {
-        const destination = await api.destinationByName(name);
-        if (!active || !destination) return;
-        const [placesRes, viewpointsRes, allRes] = await Promise.all([
-          api.places({ destination: destination._id, limit: 100 }),
-          api.viewpoints({ destination: destination._id, limit: 100 }),
-          api.destinations({ limit: 100 }),
-        ]);
-        const places = placesRes?.items || [];
-        const viewpoints = viewpointsRes?.items || [];
-        const others = (allRes?.items || []).filter(
-          (d) => String(d._id) !== String(destination._id)
-        );
-        if (active) setData(toDestinationDetail(destination, places, viewpoints, others));
-      } catch {
-        if (active) setData(fallbackData[name] || fallbackData.hunza);
-      }
-    })();
-    return () => {
-      active = false;
-    };
-  }, [name]);
+  const data = destinations[name] || destinations.hunza;
 
   const navigation = [
     "Overview",

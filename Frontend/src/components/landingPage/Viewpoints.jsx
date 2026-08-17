@@ -1,25 +1,8 @@
-import { useEffect, useState } from "react";
 import { Star, MapPin, Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
-import { api, toViewpointCard } from "@/api";
+import { viewpoints } from "./data";
 
 export default function Viewpoints() {
-  const [viewpoints, setViewpoints] = useState([]);
-
-  useEffect(() => {
-    let active = true;
-    api
-      .viewpoints({ limit: 3, featured: "true" })
-      .then((data) => {
-        if (active) setViewpoints((data?.items || []).map(toViewpointCard));
-      })
-      .catch(() => {
-        if (active) setViewpoints([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
   return (
     <section id="viewpoints" className="bg-ink">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">

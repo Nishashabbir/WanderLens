@@ -1,25 +1,8 @@
-import { useEffect, useState } from "react";
 import { Star, ArrowUpRight } from "lucide-react";
-import { api, toTrendingPlace } from "@/api";
+import { trending } from "./data";
 import SectionHeading from "./SectionHeading";
 
 export default function Trending() {
-  const [trending, setTrending] = useState([]);
-
-  useEffect(() => {
-    let active = true;
-    api
-      .places({ limit: 3, sort: "popularity" })
-      .then((data) => {
-        if (active) setTrending((data?.items || []).map(toTrendingPlace));
-      })
-      .catch(() => {
-        if (active) setTrending([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
   return (
     <section id="experiences" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
       <SectionHeading

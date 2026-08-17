@@ -1,94 +1,45 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import fairyImage from "@/assets/travel2.jpg";
 import hunza from "@/assets/hunza1.webp";
 import skardu from "@/assets/skardu2.jpg";
 import PageNavbar from "./PageNavbar";
-import { api, toPlaceDetail, toRelatedPlace } from "@/api";
-import { useAuth } from "@/context/AuthContext";
-
-const slugify = (value) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-");
 
 export default function PlaceDetails() {
-  const { name } = useParams();
-  const { user } = useAuth();
   const [saved, setSaved] = useState(false);
   const [addedToTrip, setAddedToTrip] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
-  const [place, setPlace] = useState(null);
-  const [relatedPlaces, setRelatedPlaces] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    let active = true;
-    (async () => {
-      try {
-        const placeDoc = await api.placeByName(name);
-        if (!active || !placeDoc) return;
-        setPlace(toPlaceDetail(placeDoc));
-        const destinationId = placeDoc.destination?._id || placeDoc.destination;
-        if (destinationId) {
-          const relatedRes = await api.places({ destination: destinationId, limit: 6 });
-          const related = (relatedRes?.items || [])
-            .filter((p) => String(p._id) !== String(placeDoc._id))
-            .map(toRelatedPlace);
-          if (active) setRelatedPlaces(related.slice(0, 3));
-        }
-      } catch {
-        if (active) {
-          setPlace(null);
-          setRelatedPlaces([]);
-        }
-      }
-    })();
-    return () => {
-      active = false;
-    };
-  }, [name]);
-
-  const current =
-    place || {
-      name: "Loading…",
-      destination: "",
-      region: "",
-      category: "Place",
-      type: "Place",
-      location: "",
-      rating: 0,
-      reviews: 0,
-      images: [fairyImage, hunza, skardu],
-      description: "Loading this place…",
-      openingHours: "",
-      entryFee: 0,
-      bestTime: "",
-      duration: "",
-    };
-
-  const images = current.images;
-
-  const entryFeeLabel = current.entryFee
-    ? `PKR ${current.entryFee}`
-    : "Free";
-
-  const toggleSave = async () => {
-    if (!user) return navigate("/login");
-    if (saved) {
-      await api.unsavePlace(current.id);
-      setSaved(false);
-    } else {
-      await api.savePlace(current.type === "Viewpoint" ? "Viewpoint" : "Place", current.id);
-      setSaved(true);
-    }
-  };
 
   const addToTrip = () => {
     setAddedToTrip(true);
-    navigate(`/trips?place=${encodeURIComponent(slugify(current.name))}`);
+    navigate("/trips?place=eagle%27s-nest");
   };
+
+  const images = [
+    fairyImage , hunza , skardu 
+    ];
+
+  const relatedPlaces = [
+    {
+      name: "Passu Cones",
+      location: "Hunza, Gilgit-Baltistan",
+      rating: "4.9",
+      image: fairyImage
+    },
+    {
+      name: "Attabad Lake",
+      location: "Hunza, Gilgit-Baltistan",
+      rating: "4.8",
+      image: hunza 
+    },
+    {
+      name: "Khunjerab Pass",
+      location: "Hunza, Gilgit-Baltistan",
+      rating: "4.9",
+      image: skardu
+    },
+  ];
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f1e7] text-[#301c14]">
@@ -110,7 +61,7 @@ export default function PlaceDetails() {
 
         <img
           src={images[activeImage]}
-          alt={current.name}
+          alt="Eagle's Nest"
           className="absolute inset-0 h-full w-full object-cover transition duration-700"
         />
 
@@ -172,20 +123,20 @@ export default function PlaceDetails() {
 
               <div className="mb-4 flex flex-wrap items-center gap-3 text-xs text-white/65">
 
-                <span>{current.destination || "Pakistan"}</span>
+                <span>Hunza</span>
 
                 <span>•</span>
 
-                <span>{current.region}</span>
+                <span>Gilgit-Baltistan</span>
 
                 <span>•</span>
 
-                <span>{current.category}</span>
+                <span>Viewpoint</span>
 
               </div>
 
               <h1 className="font-serif text-6xl font-bold tracking-[-3px] md:text-8xl">
-                {current.name}
+                Eagle's Nest
               </h1>
 
               <div className="mt-5 flex flex-wrap items-center gap-4">
@@ -195,11 +146,11 @@ export default function PlaceDetails() {
                   <StarIcon className="h-4 w-4 fill-[#f28a12] text-[#f28a12]" />
 
                   <span className="text-sm font-semibold">
-                    {current.rating}
+                    4.9
                   </span>
 
                   <span className="text-xs text-white/50">
-                    {current.reviews} reviews
+                    328 reviews
                   </span>
 
                 </div>
@@ -208,7 +159,7 @@ export default function PlaceDetails() {
 
                   <PinIcon className="h-4 w-4" />
 
-                  {current.location}
+                  Altit, Hunza
 
                 </div>
 
@@ -222,7 +173,7 @@ export default function PlaceDetails() {
             <div className="flex gap-3">
 
               <button
-                onClick={toggleSave}
+                onClick={() => setSaved(!saved)}
                 className={`flex h-12 items-center gap-2 rounded-full px-5 text-sm font-medium backdrop-blur-md transition duration-300 ${
                   saved
                     ? "bg-[#e87908] text-white"
@@ -293,16 +244,17 @@ export default function PlaceDetails() {
               </h2>
 
               <p className="mt-7 max-w-[850px] text-[15px] leading-8 text-[#71645c]">
-                {current.description ||
-                  `${current.name} is a place worth discovering on your next journey.`}
+                Eagle's Nest is one of Hunza's most spectacular viewpoints,
+                sitting high above the valley near the historic village of
+                Duikar. From here, the landscape unfolds in almost every
+                direction — dramatic peaks, green valleys and tiny villages
+                scattered far below.
               </p>
 
               <p className="mt-5 max-w-[850px] text-[15px] leading-8 text-[#71645c]">
-                Plan to visit during{" "}
-                {current.bestTime
-                  ? current.bestTime.toLowerCase()
-                  : "the best light"}, with roughly {current.duration || "1–2 hours"} on
-                site.
+                The viewpoint is particularly magical around sunrise and
+                sunset, when the surrounding Karakoram peaks catch the warm
+                light and the valley slowly changes colour.
               </p>
 
             </section>
@@ -315,25 +267,25 @@ export default function PlaceDetails() {
               <InfoBox
                 icon={<ClockIcon />}
                 label="Best time"
-                value={current.bestTime || "Anytime"}
+                value="Sunrise"
               />
 
               <InfoBox
                 icon={<MountainIcon />}
-                label="Type"
-                value={current.category}
+                label="Elevation"
+                value="2,800m"
               />
 
               <InfoBox
                 icon={<TicketIcon />}
                 label="Entry fee"
-                value={entryFeeLabel}
+                value="PKR 100"
               />
 
               <InfoBox
                 icon={<SunIcon />}
                 label="Ideal stay"
-                value={current.duration || "1–2 hours"}
+                value="1–2 hours"
               />
 
             </section>
@@ -359,25 +311,25 @@ export default function PlaceDetails() {
                 <VisitRow
                   icon={<ClockIcon />}
                   title="Opening hours"
-                  value={current.openingHours || "See local listing"}
+                  value="Daily · 05:00 AM – 08:00 PM"
                 />
 
                 <VisitRow
                   icon={<TicketIcon />}
                   title="Entry fee"
-                  value={entryFeeLabel}
+                  value="PKR 100 per person"
                 />
 
                 <VisitRow
                   icon={<CarIcon />}
                   title="Getting there"
-                  value={current.location || "Check local directions"}
+                  value="Approximately 30 minutes from Karimabad"
                 />
 
                 <VisitRow
                   icon={<SunIcon />}
                   title="Best experience"
-                  value={current.bestTime || "Golden hour"}
+                  value="Sunrise & golden hour"
                 />
 
               </div>
@@ -462,11 +414,11 @@ export default function PlaceDetails() {
                 <div className="absolute left-[calc(50%+40px)] top-[calc(45%-10px)] rounded-xl bg-white px-4 py-3 shadow-xl">
 
                   <p className="font-serif text-sm font-bold">
-                    {current.name}
+                    Eagle's Nest
                   </p>
 
                   <p className="mt-1 text-[10px] text-[#8d8178]">
-                    {current.location}
+                    Duikar, Hunza
                   </p>
 
                 </div>
@@ -498,7 +450,7 @@ export default function PlaceDetails() {
                   </p>
 
                   <h3 className="mt-3 font-serif text-3xl font-bold">
-                    {current.name}
+                    Eagle's Nest
                   </h3>
 
                   <div className="mt-4 flex items-center gap-2">
@@ -506,11 +458,11 @@ export default function PlaceDetails() {
                     <StarIcon className="h-4 w-4 fill-[#f28a12] text-[#f28a12]" />
 
                     <span className="text-sm font-semibold">
-                      {current.rating}
+                      4.9
                     </span>
 
                     <span className="text-xs text-white/50">
-                      · {current.reviews} reviews
+                      · 328 reviews
                     </span>
 
                   </div>
@@ -525,19 +477,19 @@ export default function PlaceDetails() {
                     <SidebarInfo
                       icon={<ClockIcon />}
                       label="Opening hours"
-                      value={current.openingHours || "See listing"}
+                      value="05:00 AM – 08:00 PM"
                     />
 
                     <SidebarInfo
                       icon={<TicketIcon />}
                       label="Entry fee"
-                      value={entryFeeLabel}
+                      value="PKR 100"
                     />
 
                     <SidebarInfo
                       icon={<PinIcon />}
                       label="Location"
-                      value={current.location}
+                      value="Duikar, Hunza"
                     />
 
                   </div>
@@ -565,7 +517,7 @@ export default function PlaceDetails() {
 
 
                   <button
-                    onClick={toggleSave}
+                    onClick={() => setSaved(!saved)}
                     className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-full border border-[#d9cec1] text-sm font-medium transition hover:border-[#e87908] hover:text-[#e87908]"
                   >
 
@@ -636,7 +588,7 @@ export default function PlaceDetails() {
               </p>
 
               <h2 className="mt-3 font-serif text-4xl font-bold md:text-5xl">
-                More around {current.destination || "here"}.
+                More around Hunza.
               </h2>
 
             </div>

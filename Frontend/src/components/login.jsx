@@ -1,30 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import travel from "@/assets/vp-fairy.jpg";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSubmitting(true);
-    try {
-      await login(email, password);
-      navigate("/");
-    } catch (err) {
-      setError(err.message || "Login failed. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#f7f1e7] p-4 md:p-5 flex items-center justify-center">
@@ -169,7 +148,7 @@ export default function Login() {
 
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-12 space-y-6">
+            <form className="mt-12 space-y-6">
 
               {/* Email */}
               <div>
@@ -208,8 +187,6 @@ export default function Login() {
 
                   <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     className="h-[57px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-4 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -268,8 +245,6 @@ export default function Login() {
 
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     className="h-[57px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-14 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -336,20 +311,12 @@ export default function Login() {
               </div>
 
 
-              {error && (
-                <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-                  {error}
-                </p>
-              )}
-
-
               {/* Login */}
               <button
                 type="submit"
-                disabled={submitting}
-                className="h-[57px] w-full rounded-full bg-gradient-to-r from-[#df6900] to-[#f18a00] text-base font-semibold text-white shadow-md shadow-orange-500/20 transition duration-200 hover:-translate-y-[1px] hover:shadow-lg hover:shadow-orange-500/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-[57px] w-full rounded-full bg-gradient-to-r from-[#df6900] to-[#f18a00] text-base font-semibold text-white shadow-md shadow-orange-500/20 transition duration-200 hover:-translate-y-[1px] hover:shadow-lg hover:shadow-orange-500/25 active:translate-y-0"
               >
-                {submitting ? "Logging in…" : "Log In"}
+                Log In
               </button>
 
 

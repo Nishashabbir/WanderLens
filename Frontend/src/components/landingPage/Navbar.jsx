@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Compass, Menu, User } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { label: "Home", to: "/" },
@@ -13,7 +12,6 @@ const links = [
 ];
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -70,35 +68,14 @@ export default function Navbar() {
           >
             <Search className="h-4 w-4" />
           </a>
-          {user ? (
-            <>
-              <Link
-                to="/profile"
-                className="hidden rounded-full bg-[image:var(--gradient-warm)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5 sm:block"
-              >
-                {user.name || "Profile"}
-              </Link>
-              <button
-                onClick={logout}
-                className={`hidden rounded-full border px-4 py-2.5 text-sm font-semibold transition-colors sm:block ${
-                  scrolled
-                    ? "border-border text-foreground hover:bg-secondary"
-                    : "border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
-                }`}
-              >
-                Log out
-              </button>
-            </>
-          ) : (
-            <Link
-              to="/login"
-              className="hidden rounded-full bg-[image:var(--gradient-warm)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5 sm:block"
-            >
-              Log in
-            </Link>
-          )}
           <Link
-            to={user ? "/profile" : "/login"}
+            to="/login"
+            className="hidden rounded-full bg-[image:var(--gradient-warm)] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5 sm:block"
+          >
+            Log in
+          </Link>
+          <Link
+            to="/profile"
             aria-label="Your profile"
             className={`grid h-10 w-10 place-items-center rounded-full border transition-colors ${
               scrolled

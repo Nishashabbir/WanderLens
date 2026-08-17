@@ -1,27 +1,9 @@
-import { useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { api, toDestinationCard } from "@/api";
+import { destinations } from "./data";
 import SectionHeading from "./SectionHeading";
 
 export default function Destinations() {
-  const [destinations, setDestinations] = useState([]);
-
-  useEffect(() => {
-    let active = true;
-    api
-      .destinations({ limit: 6 })
-      .then((data) => {
-        if (active) setDestinations((data?.items || []).map(toDestinationCard));
-      })
-      .catch(() => {
-        if (active) setDestinations([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
-
   return (
     <section id="destinations" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
       <div className="flex flex-wrap items-end justify-between gap-6">

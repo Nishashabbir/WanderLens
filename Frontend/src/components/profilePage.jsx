@@ -1,84 +1,49 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import fairyImage from "@/assets/travel2.jpg";
+import hunza from "@/assets/hunza1.webp";
+import skardu from "@/assets/skardu2.jpg";
 import PageNavbar from "./PageNavbar";
-import { api, toSavedCard } from "@/api";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Profile() {
-  const { user, loading, logout } = useAuth();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Overview");
-  const [savedPlaces, setSavedPlaces] = useState([]);
-  const [trips, setTrips] = useState([]);
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-    let active = true;
-    api
-      .savedPlaces()
-      .then((items) => {
-        if (active) setSavedPlaces((items || []).map(toSavedCard));
-      })
-      .catch(() => {});
-    api
-      .trips()
-      .then((items) => {
-        if (active) setTrips(items || []);
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, [loading, user, navigate]);
-
-  if (loading || !user) return null;
-
-  const name = user.name || "Explorer";
-  const initials = name
-    .split(/\s+/)
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  const memberSince = user.createdAt
-    ? new Date(user.createdAt).toLocaleDateString(undefined, {
-        month: "long",
-        year: "numeric",
-      })
-    : "2026";
-
-  const placesSaved = savedPlaces.length;
-  const tripsPlanned = trips.length;
-  const placesExplored = savedPlaces.filter((s) => s.itemType === "Place").length;
-  const viewpoints = savedPlaces.filter((s) => s.itemType === "Viewpoint").length;
-
-  const activities = [
+  const savedPlaces = [
     {
-      title: `${placesSaved} places in your collection`,
-      time: "Saved across your journeys",
-      icon: "bookmark",
+      name: "Hunza Valley",
+      location: "Gilgit-Baltistan, Pakistan",
+      category: "Mountains",
+      image: hunza
     },
     {
-      title: `${tripsPlanned} trips planned`,
-      time: "Ready for your next adventure",
-      icon: "compass",
-    },
+      name: "Fairy Meadows",
+      location: "Gilgit-Baltistan, Pakistan",
+      category: "Nature",
+      image: fairyImage },
     {
-      title: `Profile updated`,
-      time: memberSince,
-      icon: "heart",
+      name: "Skardu",
+      location: "Gilgit-Baltistan, Pakistan",
+      category: "Adventure",
+      image: skardu
     },
   ];
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/");
-  };
+  const activities = [
+    {
+      title: "Saved Fairy Meadows",
+      time: "2 hours ago",
+      icon: "bookmark",
+    },
+    {
+      title: "Explored Hunza",
+      time: "Yesterday",
+      icon: "compass",
+    },
+    {
+      title: "Added Skardu to your wishlist",
+      time: "3 days ago",
+      icon: "heart",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#f6f0e6] text-[#2d1a12]">
@@ -133,7 +98,7 @@ export default function Profile() {
                 <div className="relative">
 
                   <div className="flex h-28 w-28 items-center justify-center rounded-full border-[5px] border-white/30 bg-[#e87908] font-serif text-4xl font-bold text-white shadow-2xl">
-                    {initials}
+                    NS
                   </div>
 
                   <div className="absolute bottom-1 right-1 flex h-8 w-8 items-center justify-center rounded-full border-4 border-[#321d14] bg-[#e87908]">
@@ -150,7 +115,7 @@ export default function Profile() {
                   </p>
 
                   <h1 className="font-serif text-4xl font-bold text-white md:text-5xl">
-                    {name}
+                    Nisha Shabbir
                   </h1>
 
                   <p className="mt-3 max-w-[480px] text-sm leading-6 text-white/70 md:text-base">
@@ -197,22 +162,22 @@ export default function Profile() {
             <section className="grid grid-cols-2 overflow-hidden rounded-[24px] border border-[#e0d6c8] bg-[#fffdf9] md:grid-cols-4">
 
               <Stat
-                number={placesSaved}
+                number="24"
                 label="Places saved"
               />
 
               <Stat
-                number={tripsPlanned}
+                number="07"
                 label="Trips planned"
               />
 
               <Stat
-                number={placesExplored}
+                number="18"
                 label="Places explored"
               />
 
               <Stat
-                number={viewpoints}
+                number="06"
                 label="Viewpoints"
               />
 
@@ -332,9 +297,7 @@ export default function Profile() {
                 </div>
 
                 <h2 className="mt-4 font-serif text-3xl font-bold text-white">
-                  {trips[0]
-                    ? `${trips[0].name || "Your trip"} is waiting.`
-                    : "Skardu, here we come."}
+                  Skardu, here we come.
                 </h2>
 
                 <p className="mt-2 max-w-[430px] text-sm leading-6 text-white/80">
@@ -451,17 +414,17 @@ export default function Profile() {
 
                 <InfoRow
                   label="Email"
-                  value={user.email || ""}
+                  value="nisha@example.com"
                 />
 
                 <InfoRow
                   label="Location"
-                  value={user.profile?.location || "Pakistan"}
+                  value="Lahore, Pakistan"
                 />
 
                 <InfoRow
                   label="Member since"
-                  value={memberSince}
+                  value="August 2026"
                 />
 
               </div>
@@ -540,10 +503,7 @@ export default function Profile() {
 
 
             {/* Logout */}
-            <button
-            onClick={handleLogout}
-            className="group flex w-full items-center justify-center gap-3 rounded-[20px] border border-[#e0d6c8] bg-transparent px-5 py-4 text-sm font-medium text-[#8a5c4a] transition hover:border-[#c96b45] hover:bg-[#fff5ef]"
-          >
+            <button className="group flex w-full items-center justify-center gap-3 rounded-[20px] border border-[#e0d6c8] bg-transparent px-5 py-4 text-sm font-medium text-[#8a5c4a] transition hover:border-[#c96b45] hover:bg-[#fff5ef]">
 
               <LogoutIcon className="h-4 w-4 transition group-hover:-translate-x-1" />
 

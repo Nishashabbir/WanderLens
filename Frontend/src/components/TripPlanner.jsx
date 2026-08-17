@@ -1,7 +1,70 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { api, toPlaceCard, toTrip, tripToPayload } from "@/api";
-import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+const STORAGE_KEY = "wanderlens_trips";
+
+/* =========================================================
+   SAMPLE PLACES
+   Later these will come from your backend/database.
+========================================================= */
+
+const placesData = [
+  {
+    id: 1,
+    name: "Baltit Fort",
+    location: "Karimabad, Hunza",
+    category: "Historical",
+    rating: 4.8,
+    image:
+      "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=900&q=85",
+  },
+  {
+    id: 2,
+    name: "Attabad Lake",
+    location: "Gojal, Hunza",
+    category: "Nature",
+    rating: 4.9,
+    image:
+      "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=85",
+  },
+  {
+    id: 3,
+    name: "Eagle's Nest",
+    location: "Duikar, Hunza",
+    category: "Viewpoint",
+    rating: 4.8,
+    image:
+      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85",
+  },
+  {
+    id: 4,
+    name: "Altit Fort",
+    location: "Altit, Hunza",
+    category: "Historical",
+    rating: 4.7,
+    image:
+      "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=85",
+  },
+  {
+    id: 5,
+    name: "Passu Cones",
+    location: "Gojal, Hunza",
+    category: "Nature",
+    rating: 4.9,
+    image:
+      "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=900&q=85",
+  },
+  {
+    id: 6,
+    name: "Khunjerab Pass",
+    location: "Hunza",
+    category: "Adventure",
+    rating: 4.8,
+    image:
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=85",
+  },
+];
+
 
 /* =========================================================
    MAIN COMPONENT
@@ -9,14 +72,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function TripPlanner() {
 
-  const { user, loading } = useAuth();
-
   const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
-
-  const pendingPlace = searchParams.get("place") || "";
-
 
   /* -------------------------------------------------------
      TRIPS
@@ -25,10 +81,6 @@ export default function TripPlanner() {
   const [trips, setTrips] = useState([]);
 
   const [activeTrip, setActiveTrip] = useState(null);
-
-  const [destinations, setDestinations] = useState([]);
-
-  const [places, setPlaces] = useState([]);
 
 
   /* -------------------------------------------------------
@@ -60,86 +112,88 @@ export default function TripPlanner() {
   const [selectedDay, setSelectedDay] =
     useState(null);
 
-  const [search, setSearch] = useState(
-    pendingPlace
-  );
+  const [search, setSearch] = useState("");
 
 
   /* -------------------------------------------------------
-     LOAD TRIPS + LOOKUP DATA
+     LOAD SAVED TRIPS
   ------------------------------------------------------- */
 
   useEffect(() => {
 
-    if (loading) return;
+    const savedTrips =
+      JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+      ) || [];
 
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+    setTrips(savedTrips);
 
-    let active = true;
+  }, []);
 
-    Promise.all([
-      api.trips(),
-      api.destinations({ limit: 100 }),
-      api.places({ limit: 100 }),
-    ])
-      .then(([tripItems, destData, placeData]) => {
 
-        if (!active) return;
+  /* =======================================================
+     SAVE TRIPS TO LOCAL STORAGE
+  ======================================================= */
 
-        setTrips((tripItems || []).map(toTrip));
+  const saveTripsToStorage = (updatedTrips) => {
 
-        setDestinations(destData?.items || []);
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(updatedTrips)
+    );
 
-        setPlaces((placeData?.items || []).map(toPlaceCard));
-
-      })
-      .catch(() => {});
-
-    return () => {
-      active = false;
-    };
-
-  }, [loading, user, navigate]);
+    setTrips(updatedTrips);
+  };
 
 
   /* =======================================================
      CREATE TRIP
   ======================================================= */
 
-  const createTrip = async () => {
+  const createTrip = () => {
 
     if (!tripName.trim() || !destination) {
       return;
     }
 
-    await api.tripCreate({
+    const newTrip = {
+
+      id: Date.now(),
 
       name: tripName.trim(),
 
       destination,
 
-      startDate: startDate || null,
+      startDate,
 
-      endDate: endDate || null,
+      endDate,
 
-    });
+      createdAt:
+        new Date().toISOString(),
+
+      days: [
+
+        {
+          id: Date.now() + 1,
+
+          title: "Day 1",
+
+          places: [],
+        },
+
+      ],
+    };
 
 
-    const updated = await api.trips();
+    const updatedTrips = [
+      ...trips,
+      newTrip,
+    ];
 
-    const mapped = (updated || []).map(toTrip);
 
-    setTrips(mapped);
+    saveTripsToStorage(updatedTrips);
 
-    const created =
-      mapped.find((trip) =>
-        trip.name === tripName.trim()
-      ) || mapped[mapped.length - 1];
-
-    setActiveTrip(created || null);
+    setActiveTrip(newTrip);
 
     setTripName("");
 
@@ -161,17 +215,16 @@ export default function TripPlanner() {
 
     setActiveTrip(updatedTrip);
 
-    setTrips((current) =>
-      current.map((trip) =>
+
+    const updatedTrips =
+      trips.map((trip) =>
         trip.id === updatedTrip.id
           ? updatedTrip
           : trip
-      )
-    );
+      );
 
-    api
-      .tripUpdate(updatedTrip.id, tripToPayload(updatedTrip))
-      .catch(() => {});
+
+    saveTripsToStorage(updatedTrips);
   };
 
 
@@ -186,7 +239,7 @@ export default function TripPlanner() {
 
     const newDay = {
 
-      id: `day-${Date.now()}`,
+      id: Date.now(),
 
       title:
         `Day ${activeTrip.days.length + 1}`,
@@ -218,7 +271,7 @@ export default function TripPlanner() {
 
     setSelectedDay(dayId);
 
-    setSearch(pendingPlace);
+    setSearch("");
 
     setShowPlacePicker(true);
   };
@@ -362,16 +415,16 @@ export default function TripPlanner() {
      DELETE TRIP
   ======================================================= */
 
-  const deleteTrip = async (tripId) => {
+  const deleteTrip = (tripId) => {
 
-    await api.tripDelete(tripId);
-
-    setTrips((current) =>
-      current.filter(
+    const updatedTrips =
+      trips.filter(
         (trip) =>
           trip.id !== tripId
-      )
-    );
+      );
+
+
+    saveTripsToStorage(updatedTrips);
 
     setActiveTrip(null);
   };
@@ -382,7 +435,7 @@ export default function TripPlanner() {
   ======================================================= */
 
   const filteredPlaces =
-    places.filter((place) => {
+    placesData.filter((place) => {
 
       const text =
         `${place.name}
@@ -484,12 +537,7 @@ export default function TripPlanner() {
             }
             className="flex h-10 w-10 items-center justify-center rounded-full bg-[#301c14] text-xs font-bold text-white"
           >
-            {(user?.name || "U")
-              .split(/\s+/)
-              .map((part) => part[0])
-              .join("")
-              .slice(0, 2)
-              .toUpperCase()}
+            NS
           </button>
 
         </div>
@@ -1152,14 +1200,25 @@ export default function TripPlanner() {
                     Select destination
                   </option>
 
-                  {destinations.map((dest) => (
-                    <option
-                      key={dest._id}
-                      value={dest._id}
-                    >
-                      {dest.name}
-                    </option>
-                  ))}
+                  <option value="Hunza Valley">
+                    Hunza Valley
+                  </option>
+
+                  <option value="Skardu">
+                    Skardu
+                  </option>
+
+                  <option value="Swat">
+                    Swat
+                  </option>
+
+                  <option value="Murree">
+                    Murree
+                  </option>
+
+                  <option value="Lahore">
+                    Lahore
+                  </option>
 
                 </select>
 

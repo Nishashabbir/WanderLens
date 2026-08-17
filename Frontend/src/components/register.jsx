@@ -1,37 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import travel from "@/assets/vp-daman.jpg";
-import { useAuth } from "@/context/AuthContext";
 
 export default function Register() {
-  const { register } = useAuth();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      await register(name, email, password);
-      navigate("/");
-    } catch (err) {
-      setError(err.message || "Registration failed. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#f7f1e7] p-4 md:p-5 flex items-center justify-center">
@@ -193,7 +166,7 @@ export default function Register() {
 
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            <form className="mt-8 space-y-4">
 
               {/* Name */}
               <div>
@@ -232,8 +205,6 @@ export default function Register() {
 
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
                     placeholder="Your full name"
                     className="h-[54px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-4 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -282,8 +253,6 @@ export default function Register() {
 
                   <input
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     className="h-[54px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-4 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -332,8 +301,6 @@ export default function Register() {
 
                   <input
                     type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password"
                     className="h-[54px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-14 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -390,8 +357,6 @@ export default function Register() {
 
                   <input
                     type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Repeat your password"
                     className="h-[54px] w-full rounded-xl border border-[#ddd7d0] bg-[#fffdfa] pl-14 pr-14 text-[15px] text-[#2c1a12] outline-none transition placeholder:text-[#9a918a] focus:border-[#ed8508] focus:ring-2 focus:ring-[#ed8508]/10"
                   />
@@ -441,20 +406,12 @@ export default function Register() {
               </div>
 
 
-              {error && (
-                <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-                  {error}
-                </p>
-              )}
-
-
               {/* Create Account */}
               <button
                 type="submit"
-                disabled={submitting}
-                className="mt-1 h-[56px] w-full rounded-full bg-gradient-to-r from-[#df6900] to-[#f18a00] text-base font-semibold text-white shadow-md shadow-orange-500/20 transition duration-200 hover:-translate-y-[1px] hover:shadow-lg hover:shadow-orange-500/25 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-1 h-[56px] w-full rounded-full bg-gradient-to-r from-[#df6900] to-[#f18a00] text-base font-semibold text-white shadow-md shadow-orange-500/20 transition duration-200 hover:-translate-y-[1px] hover:shadow-lg hover:shadow-orange-500/25 active:translate-y-0"
               >
-                {submitting ? "Creating account…" : "Create Account"}
+                Create Account
               </button>
 
 

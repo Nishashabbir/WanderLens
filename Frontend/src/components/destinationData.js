@@ -15,6 +15,7 @@ import lulusarLake from "@/assets/tr-lake.jpg";
 import attabadLake from "@/assets/attabadLake.webp";
 import rakaposhi from "@/assets/rakaposhi.jpg";
 import lahoreFort from "@/assets/lahoreFort.jpg";
+import monument from "@/assets/monumnet.webp";
 
 export const destinations = {
   hunza: {
@@ -162,8 +163,7 @@ export const destinations = {
         category: "Heritage",
         description:
           "A blooming petal-shaped monument honouring the nation's history.",
-        image:
-          "https://images.unsplash.com/photo-1600675732583-ba4f0c4fa94d?auto=format&fit=crop&w=1400&q=85",
+        image: monument,
       },
     ],
     activities: [

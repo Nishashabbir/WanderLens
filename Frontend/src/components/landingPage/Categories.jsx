@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { Mountain, Landmark, Leaf, Waves, Binoculars, Compass, UtensilsCrossed } from "lucide-react";
-import { api, toCategory } from "@/api";
+import { categories } from "./data";
 import SectionHeading from "./SectionHeading";
 
 const icons = {
@@ -14,22 +13,6 @@ const icons = {
 };
 
 export default function Categories() {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    let active = true;
-    api
-      .categories()
-      .then((data) => {
-        if (active) setCategories((data || []).map(toCategory));
-      })
-      .catch(() => {
-        if (active) setCategories([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
   return (
     <section id="explore" className="border-y border-border bg-sand/50">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24">

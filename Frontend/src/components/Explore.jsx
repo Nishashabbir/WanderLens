@@ -1,62 +1,164 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import PageNavbar from "./PageNavbar";
-import { api, toPlaceCard } from "@/api";
-import { useAuth } from "@/context/AuthContext";
+import hussainiBridge from "@/assets/hussainiBridge.jpg";
 
 export default function Explore() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [search, setSearch] = useState("Hunza");
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortBy, setSortBy] = useState("Popular");
   const [saved, setSaved] = useState([]);
-  const [places, setPlaces] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
   const [mobileFilters, setMobileFilters] = useState(false);
 
-  useEffect(() => {
-    let active = true;
-    api
-      .places({ limit: 100 })
-      .then((data) => {
-        if (active) setPlaces((data?.items || []).map(toPlaceCard));
-      })
-      .catch(() => {
-        if (active) setPlaces([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+  const places = [
+    {
+      id: 1,
+      name: "Attabad Lake",
+      location: "Hunza, Gilgit-Baltistan",
+      category: "Nature",
+      type: "Destination",
+      rating: "4.9",
+      reviews: "284",
+      image:
+        "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "Turquoise waters surrounded by dramatic mountain peaks.",
+      tag: "Must visit",
+    },
+    {
+      id: 2,
+      name: "Eagle's Nest",
+      location: "Duikar, Hunza",
+      category: "Viewpoints",
+      type: "Viewpoint",
+      rating: "4.8",
+      reviews: "193",
+      image:
+        "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "A breathtaking viewpoint overlooking the Hunza Valley.",
+      tag: "Sunrise",
+    },
+    {
+      id: 3,
+      name: "Altit Fort",
+      location: "Altit, Hunza",
+      category: "Historical",
+      type: "Place",
+      rating: "4.7",
+      reviews: "157",
+      image:
+        "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "An ancient fort with centuries of history and mountain views.",
+      tag: "Heritage",
+    },
+    {
+      id: 4,
+      name: "Fairy Meadows",
+      location: "Diamer, Gilgit-Baltistan",
+      category: "Nature",
+      type: "Destination",
+      rating: "4.9",
+      reviews: "421",
+      image:
+        "https://images.unsplash.com/photo-1464278533981-50106e6176b1?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "A peaceful alpine meadow beneath the legendary Nanga Parbat.",
+      tag: "Popular",
+    },
+    {
+      id: 5,
+      name: "Khunjerab Pass",
+      location: "Hunza, Gilgit-Baltistan",
+      category: "Adventure",
+      type: "Destination",
+      rating: "4.8",
+      reviews: "238",
+      image:
+        "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "High-altitude landscapes where Pakistan meets the Karakoram.",
+      tag: "Adventure",
+    },
+    {
+      id: 6,
+      name: "Passu Cones",
+      location: "Gojal, Hunza",
+      category: "Viewpoints",
+      type: "Viewpoint",
+      rating: "4.9",
+      reviews: "316",
+      image:
+        "https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "Iconic sharp peaks rising dramatically above the valley.",
+      tag: "Iconic",
+    },
+    {
+      id: 7,
+      name: "Baltit Fort",
+      location: "Karimabad, Hunza",
+      category: "Historical",
+      type: "Place",
+      rating: "4.8",
+      reviews: "201",
+      image:
+        "https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "A historic fort overlooking the heart of Hunza.",
+      tag: "Heritage",
+    },
+    {
+      id: 8,
+      name: "Hussaini Bridge",
+      location: "Gojal, Hunza",
+      category: "Adventure",
+      type: "Experience",
+      rating: "4.6",
+      reviews: "174",
+      image: hussainiBridge , 
+      description:
+        "A thrilling walk across one of the valley's famous bridges.",
+      tag: "Thrill",
+    },
+    {
+      id: 9,
+      name: "Rakaposhi View Point",
+      location: "Nagar Valley",
+      category: "Viewpoints",
+      type: "Viewpoint",
+      rating: "4.9",
+      reviews: "128",
+      image:
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=85",
+      description:
+        "An incredible perspective of the mighty Rakaposhi.",
+      tag: "Scenic",
+    },
+  ];
 
-  useEffect(() => {
-    if (!user) return;
-    let active = true;
-    api
-      .savedPlaces()
-      .then((items) => {
-        if (active) setSaved((items || []).map((s) => s.item?._id || s.item));
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, [user]);
+  const categories = [
+    "All",
+    "Nature",
+    "Mountains",
+    "Historical",
+    "Viewpoints",
+    "Adventure",
+    "Food",
+  ];
 
-  const categories = useMemo(
-    () => ["All", ...Array.from(new Set(places.map((p) => p.category)))],
-    [places]
-  );
+  const filteredPlaces = places
+    .filter((place) => {
+      if (activeCategory === "All") return true;
+      return place.category === activeCategory;
+    })
+    .filter((place) => {
+      if (!search.trim()) return true;
 
-  const filteredPlaces = useMemo(() => {
-    const query = search.trim().toLowerCase();
+      const query = search.toLowerCase();
 
-    const filtered = places.filter((place) => {
-      if (activeCategory !== "All" && place.category !== activeCategory) return false;
-      if (!query) return true;
       return (
         place.name.toLowerCase().includes(query) ||
         place.location.toLowerCase().includes(query) ||
@@ -64,25 +166,14 @@ export default function Explore() {
       );
     });
 
-    const sorted = [...filtered];
-    if (sortBy === "Top rated") sorted.sort((a, b) => b.rating - a.rating);
-    else if (sortBy === "A-Z") sorted.sort((a, b) => a.name.localeCompare(b.name));
-    else if (sortBy === "Popular") sorted.sort((a, b) => b.reviews - a.reviews);
-    return sorted;
-  }, [places, search, activeCategory, sortBy]);
-
   const visiblePlaces = filteredPlaces.slice(0, visibleCount);
 
-  const toggleSaved = async (place) => {
-    if (!user) return navigate("/login");
-    const id = place.id;
-    if (saved.includes(id)) {
-      await api.unsavePlace(id);
-      setSaved((current) => current.filter((item) => item !== id));
-    } else {
-      await api.savePlace("Place", id);
-      setSaved((current) => [...current, id]);
-    }
+  const toggleSaved = (id) => {
+    setSaved((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
   };
 
   const handleLoadMore = () => {
@@ -488,7 +579,7 @@ export default function Explore() {
                       key={place.id}
                       place={place}
                       saved={saved.includes(place.id)}
-                      onSave={() => toggleSaved(place)}
+                      onSave={() => toggleSaved(place.id)}
                     />
 
                   ))}

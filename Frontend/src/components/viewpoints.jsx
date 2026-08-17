@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import PageNavbar from "./PageNavbar";
-import { api, toViewpoint } from "@/api";
-import { useAuth } from "@/context/AuthContext";
+import k2 from "@/assets/k2.jpg";
+import rakaposhi from "@/assets/rakaposhi.jpg";
+import fairymeedows from "@/assets/fairymeadows.jpg";
 
 const slugify = (value) =>
   value
@@ -10,65 +11,148 @@ const slugify = (value) =>
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-");
 
-const CATEGORY_MAP = {
-  Mountain: "Mountains",
-  Nature: "Nature",
-  Lake: "Nature",
-  City: "Viewpoints",
-};
-
 export default function Viewpoints() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [destination, setDestination] = useState("All");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("Top rated");
   const [saved, setSaved] = useState([]);
-  const [viewpoints, setViewpoints] = useState([]);
   const [visibleCount, setVisibleCount] = useState(6);
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    let active = true;
-    api
-      .viewpoints({ limit: 100 })
-      .then((data) => {
-        if (active) setViewpoints((data?.items || []).map(toViewpoint));
-      })
-      .catch(() => {
-        if (active) setViewpoints([]);
-      });
-    return () => {
-      active = false;
-    };
-  }, []);
+  const viewpoints = [
+    {
+      id: 1,
+      name: "Eagle's Nest",
+      destination: "Hunza",
+      category: "Mountain",
+      rating: 4.9,
+      reviews: 328,
+      bestTime: "Sunrise",
+      elevation: "2,800m",
+      description:
+        "Watch the entire Hunza Valley slowly light up beneath the Karakoram.",
+      image:
+        "https://images.unsplash.com/photo-1589553416260-f586c8f1514f?auto=format&fit=crop&w=1600&q=90",
+      featured: true,
+    },
+    {
+      id: 2,
+      name: "Passu Viewpoint",
+      destination: "Hunza",
+      category: "Mountain",
+      rating: 4.9,
+      reviews: 281,
+      bestTime: "Golden hour",
+      elevation: "2,400m",
+      description:
+        "The iconic Passu Cones rising dramatically from the valley floor.",
+      image:
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85",
+    },
+    {
+      id: 3,
+      name: "Rakaposhi View Point",
+      destination: "Nagar",
+      category: "Mountain",
+      rating: 4.8,
+      reviews: 196,
+      bestTime: "Sunset",
+      elevation: "2,100m",
+      description:
+        "A wide open view towards one of Pakistan's most spectacular peaks.",
+      image: rakaposhi , 
+    },
+    {
+      id: 4,
+      name: "Deosai Lookout",
+      destination: "Skardu",
+      category: "Nature",
+      rating: 4.8,
+      reviews: 174,
+      bestTime: "Morning",
+      elevation: "4,000m",
+      description:
+        "Endless high-altitude plains stretching toward distant mountains.",
+      image:
+        "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1200&q=85",
+    },
+    {
+      id: 5,
+      name: "Shangrila View",
+      destination: "Skardu",
+      category: "Lake",
+      rating: 4.7,
+      reviews: 243,
+      bestTime: "Late afternoon",
+      elevation: "2,500m",
+      description:
+        "A peaceful mountain landscape surrounding the famous Shangrila Lake.",
+      image:
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85",
+    },
+    {
+      id: 6,
+      name: "Fairy Meadows Ridge",
+      destination: "Diamer",
+      category: "Nature",
+      rating: 4.9,
+      reviews: 312,
+      bestTime: "Sunrise",
+      elevation: "3,300m",
+      description:
+        "One of the most dramatic perspectives of Nanga Parbat.",
+      image: fairymeedows , 
+    },
+    {
+      id: 7,
+      name: "Naltar Valley View",
+      destination: "Gilgit",
+      category: "Nature",
+      rating: 4.7,
+      reviews: 129,
+      bestTime: "Afternoon",
+      elevation: "3,100m",
+      description:
+        "Dense forests, dramatic peaks and a valley that feels completely remote.",
+      image:
+        "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=85",
+    },
+    {
+      id: 8,
+      name: "K2 View Point",
+      destination: "Skardu",
+      category: "Mountain",
+      rating: 5.0,
+      reviews: 96,
+      bestTime: "Clear mornings",
+      elevation: "3,500m",
+      description:
+        "A spectacular mountain panorama for serious landscape lovers.",
+      image: k2 , 
+    },
+  ];
 
-  useEffect(() => {
-    if (!user) return;
-    let active = true;
-    api
-      .savedPlaces()
-      .then((items) => {
-        if (active) setSaved((items || []).map((s) => s.item?._id || s.item));
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, [user]);
+  const destinations = [
+    "All",
+    "Hunza",
+    "Skardu",
+    "Nagar",
+    "Diamer",
+    "Gilgit",
+  ];
 
-  const destinations = useMemo(
-    () => ["All", ...Array.from(new Set(viewpoints.map((v) => v.destination)))],
-    [viewpoints]
-  );
-
-  const categories = ["All", "Mountain", "Nature", "Lake", "City"];
+  const categories = [
+    "All",
+    "Mountain",
+    "Nature",
+    "Lake",
+    "City",
+  ];
 
   const filtered = useMemo(() => {
     let result = viewpoints.filter((item) => {
       const query = search.toLowerCase();
-      const targetCategory = CATEGORY_MAP[category] || category;
 
       const matchesSearch =
         !query ||
@@ -80,9 +164,13 @@ export default function Viewpoints() {
         destination === "All" || item.destination === destination;
 
       const matchesCategory =
-        category === "All" || item.category === targetCategory;
+        category === "All" || item.category === category;
 
-      return matchesSearch && matchesDestination && matchesCategory;
+      return (
+        matchesSearch &&
+        matchesDestination &&
+        matchesCategory
+      );
     });
 
     if (sort === "Top rated") {
@@ -98,19 +186,16 @@ export default function Viewpoints() {
     }
 
     return result;
-  }, [viewpoints, search, destination, category, sort]);
+  }, [search, destination, category, sort]);
 
   const visible = filtered.slice(0, visibleCount);
 
-  const toggleSave = async (id) => {
-    if (!user) return navigate("/login");
-    if (saved.includes(id)) {
-      await api.unsavePlace(id);
-      setSaved((current) => current.filter((item) => item !== id));
-    } else {
-      await api.savePlace("Viewpoint", id);
-      setSaved((current) => [...current, id]);
-    }
+  const toggleSave = (id) => {
+    setSaved((current) =>
+      current.includes(id)
+        ? current.filter((item) => item !== id)
+        : [...current, id]
+    );
   };
 
   const resetFilters = () => {

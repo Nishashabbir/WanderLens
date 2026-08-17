@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { Compass, Search } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { label: "Home", to: "/" },
@@ -13,7 +12,6 @@ const links = [
 
 export default function PageNavbar({ variant = "sticky" }) {
   const { pathname } = useLocation();
-  const { user } = useAuth();
 
   const dark = variant !== "sticky";
 
@@ -69,12 +67,7 @@ export default function PageNavbar({ variant = "sticky" }) {
           to="/profile"
           className="flex h-11 w-11 items-center justify-center rounded-full bg-[#321d14] text-sm font-semibold text-white"
         >
-          {(user?.name || "U")
-            .split(/\s+/)
-            .map((part) => part[0])
-            .join("")
-            .slice(0, 2)
-            .toUpperCase()}
+          NS
         </Link>
       </div>
     </>

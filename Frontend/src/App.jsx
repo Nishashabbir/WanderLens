@@ -16,7 +16,6 @@ import DestinationDetails from "@/components/DestinationDetails";
 import ViewpointsPage from "@/components/viewpoints";
 import PlaceDetails from "@/components/placedetails";
 import TripPlanner from "@/components/TripPlanner";
-import { AuthProvider } from "@/context/AuthContext";
 
 function Home() {
   return (
@@ -38,20 +37,18 @@ function Home() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/destination/:name" element={<DestinationDetails />} />
-          <Route path="/viewpoints" element={<ViewpointsPage />} />
-          <Route path="/place/:name" element={<PlaceDetails />} />
-          <Route path="/trips" element={<TripPlanner />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/destination/:name" element={<DestinationDetails />} />
+        <Route path="/viewpoints" element={<ViewpointsPage />} />
+        <Route path="/place/:name" element={<PlaceDetails />} />
+        <Route path="/trips" element={<TripPlanner />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

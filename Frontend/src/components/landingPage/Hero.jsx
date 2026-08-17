@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Search, MapPin } from "lucide-react";
 import hero from "@/assets/hero2.png";
 
@@ -7,12 +6,6 @@ const suggestions = ["Hunza", "Islamabad", "Skardu", "Lahore", "Fairy Meadows"];
 
 export default function Hero() {
   const [query, setQuery] = useState("");
-  const navigate = useNavigate();
-
-  const submitSearch = (value) => {
-    const q = value.trim();
-    navigate(q ? `/explore?search=${encodeURIComponent(q)}` : "/explore");
-  };
 
   return (
     <section id="top" className="relative min-h-[92vh] w-full overflow-hidden">
@@ -42,10 +35,7 @@ export default function Hero() {
 
         <form
           id="search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            submitSearch(query);
-          }}
+          onSubmit={(e) => e.preventDefault()}
           className="animate-rise mt-10 w-full max-w-2xl"
         >
           <div className="flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-background/90 p-2 pl-5 shadow-[var(--shadow-lift)] backdrop-blur-xl">
@@ -69,10 +59,7 @@ export default function Hero() {
               <button
                 key={s}
                 type="button"
-                onClick={() => {
-                  setQuery(s);
-                  submitSearch(s);
-                }}
+                onClick={() => setQuery(s)}
                 className="rounded-full border   px-3 py-1.5 backdrop-blur-md transition-colors font-bold hover:bg-amber-600 cursor-pointer"
               >
                 {s}
